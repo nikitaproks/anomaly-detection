@@ -3,6 +3,15 @@ from gym import spaces
 import numpy as np
 
 class CustomEnv(gym.Env):
+    """
+    Custom created gym environment
+    Functions: 'reset', 'step' and 'move' are required by gym library
+    
+    'observation_space': has to be specified during init
+    'action_space': has to be specified during init
+    
+    See https://github.com/openai/gym/tree/master/gym/spaces to see available spaces
+    """
     def __init__(self, data, episode_length, obs_size):
         self.env = Env(data, obs_size)
         self.episode_length = episode_length
@@ -30,6 +39,12 @@ class CustomEnv(gym.Env):
         self.env.move()
             
 class Env:
+    """
+    General representation of the environment that the agent interacts with. Basically is the time series. 
+    - Provides data to the agent in required chunks (observation)
+    - Moves the agent by one step after every prediction
+    - Calculated the reward
+    """
     def __init__(self, data, obs_size):
         self.normalizer = Normalizer()
         self.data_norm = self.normalizer.normalize(data)
@@ -84,6 +99,10 @@ class Env:
         return end
     
 class Normalizer:
+    """
+    Normalizes the data. Has to be repeated is the same file for the environment to access it
+    Also implemented in "lib.ipynb" file
+    """
     def __init__(self, data = None):
         if data != None:
             self.original_max = max([abs(val) for val in data])
